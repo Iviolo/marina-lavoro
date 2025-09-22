@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <title>Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab&display=swap');
   body {
     font-family: 'Roboto', sans-serif;
     background-color: #e9f0f8;
@@ -14,22 +14,43 @@
     flex-direction: column;
     align-items: center;
   }
+
   header {
     width: 90%;
     max-width: 900px;
     text-align: center;
     margin-bottom: 20px;
     position: relative;
-    padding: 60px 20px 20px;
+    padding: 60px 20px 40px;
     color: white;
     font-weight: 700;
-    font-size: 2.5em;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/300px-MarinaMilitare_Emblem.svg.png') no-repeat center;
-    background-size: 150px 150px;
-    background-color: #003366;
+    font-size: 2.6em;
+    background-color: #002D62;
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.35);
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    overflow: hidden;
+    font-family: 'Roboto Slab', serif;
   }
+  header::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/512px-MarinaMilitare_Emblem.svg.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0.1;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+    pointer-events: none;
+    z-index: 0;
+  }
+  header > * {
+    position: relative;
+    z-index: 1;
+  }
+
   main {
     width: 90%;
     max-width: 900px;
@@ -166,7 +187,7 @@
     <button onclick="aggiornaOreResidue()">Aggiorna</button>
   </div>
 
-  <label for="dataInput">Seleziona data:</label>
+  <label for="dataInput">Seleziona </label>
   <input type="date" id="dataInput" min="2025-01-01" max="2025-12-31" />
 
   <label for="tipoSelect">Tipo attività:</label>
@@ -273,7 +294,7 @@ function aggiungiGiorno() {
     return;
   }
 
-  let entry = {data: dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
+  let entry = { dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
 
   if (tipoSelect === "guardia") {
     const params = calcolaGuardia(dataInput);
@@ -343,7 +364,6 @@ function aggiornaTabella() {
     `Ore Recupero totali: ${oreFinaliGuardia} (incluse residue: ${oreResidueGuardia}) | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} € | Ore Straordinario: ${totOreStraordinario}`;
 }
 
-// Funzione per creare calendario con pallini colorati
 function creaCalendario() {
   const calendario = document.getElementById('calendario');
   calendario.innerHTML = '';
