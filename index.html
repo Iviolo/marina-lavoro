@@ -2,10 +2,8 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Gestione Lavoro, Guardia, Recupero e Straordinario - Marina Militare</title>
+<title>Gestione Guardia e Compenso - Marina Militare</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
   body {
     font-family: 'Roboto', sans-serif;
     background-color: #f0f4f8;
@@ -15,7 +13,6 @@
     flex-direction: column;
     align-items: center;
   }
-
   header {
     width: 90%;
     max-width: 900px;
@@ -32,7 +29,6 @@
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
   }
-
   main {
     width: 90%;
     max-width: 900px;
@@ -41,27 +37,8 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
-
-  #meseAnno {
-    font-size: 1.8em;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-
-  label {
-    margin-right: 8px;
-    font-weight: 600;
-  }
-
-  input[type="date"], input[type="number"], select {
-    padding: 6px;
-    margin-right: 15px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    width: auto;
-  }
-
+  label { margin-right: 8px; font-weight: 600; }
+  input[type="date"] { padding: 6px; margin-right: 15px; border-radius: 4px; border: 1px solid #ccc; }
   button {
     padding: 8px 15px;
     background-color: #00539C;
@@ -72,387 +49,166 @@
     font-weight: 600;
     margin-top: 10px;
   }
-
-  button:hover {
-    background-color: #003D66;
-  }
-
-  #oreResidueContainer, #inputStraordinarioContainer {
-    margin: 15px 0;
-    text-align: center;
-  }
-
+  button:hover { background-color: #003D66; }
   table {
     border-collapse: collapse;
     margin-top: 20px;
     width: 100%;
     background: white;
-    font-size: 0.9em;
+    font-size: 0.95em;
   }
-
   th, td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
   }
-
   th {
     background-color: #00539C;
     color: white;
   }
-
   #totali {
     margin-top: 15px;
     font-weight: 700;
-    font-size: 1.2em;
+    font-size: 1.15em;
     text-align: center;
   }
-
-  /* Calendario */
-  #calendario {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-top: 30px;
-  }
-
-  .giorno {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 8px;
-    height: 90px;
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .giorno.inactive {
-    background-color: #eee;
-    color: #999;
-  }
-
-  .numeroGiorno {
-    font-weight: 700;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-  }
-
-  /* Pallini colore attività */
-  .pallino {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    display: inline-block;
-    margin: 2px 3px;
-  }
-
-  .lavoro { background-color: #8B4513; }     /* Marrone */
-  .guardia { background-color: #B22222; }    /* Rosso */
-  .recupero { background-color: #228B22; }   /* Verde */
-  .straordinario { background-color: #1E90FF; } /* Blu */
 </style>
 </head>
 <body>
 
 <header>
-  Gestione Lavoro, Guardia, Recupero e Straordinario - Marina Militare
+  Gestione Guardia e Compenso - Marina Militare
 </header>
 
 <main>
 
-  <div id="meseAnno"></div>
+  <label for="dataInput">Seleziona data guardia:</label>
+  <input type="date" id="dataInput" />
 
-  <div id="oreResidueContainer">
-    <label for="oreResidueInput">Ore residue guardia iniziali:</label>
-    <input type="number" id="oreResidueInput" min="0" step="0.5" value="0" />
-    <button onclick="aggiornaOreResidue()">Imposta Ore Residue</button>
-  </div>
+  <button onclick="aggiungiGiorno()">Aggiungi Guardia</button>
 
-  <div>
-    <label for="dataInput">Seleziona data:</label>
-    <input type="date" id="dataInput" />
-  </div>
-
-  <div>
-    <label for="tipoSelect">Tipo attività:</label>
-    <select id="tipoSelect">
-      <option value="lavoro">Lavoro</option>
-      <option value="guardia">Guardia</option>
-      <option value="recupero">Recupero Psicofisico</option>
-      <option value="straordinario">Straordinario</option>
-    </select>
-  </div>
-
-  <div id="inputStraordinarioContainer" style="display:none; margin-top:10px;">
-    <label for="oreStraordInput">Ore straordinario:</label>
-    <input type="number" id="oreStraordInput" min="0" step="0.5" value="0" />
-  </div>
-
-  <button onclick="aggiungiGiorno()">Aggiungi</button>
-
-  <h3>Giornate Registrate</h3>
+  <h3>Giornate di Guardia Registrate</h3>
   <table id="tabellaGiornate">
     <thead>
       <tr>
         <th>Data</th>
-        <th>Tipo</th>
-        <th>Ore Guardia</th>
-        <th>Giorni Lavorativi</th>
+        <th>Giorno Sett.</th>
         <th>Ore Recupero</th>
-        <th>Ore Straordinario</th>
-        <th>Azioni</th>
+        <th>GF</th>
+        <th>Forfettario (&euro;)</th>
+        <th>Elimina</th>
       </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
   </table>
 
-  <p id="totali">Ore Guardia Totali (incluse residue): 0 | Giorni Lavorativi: 0 | Ore Recupero: 0 | Ore Straordinario: 0</p>
-
-  <div id="calendario"></div>
+  <p id="totali">
+    Ore Recupero totali: 0 | Giorni GF: 0 | Forfettario totale: 0&nbsp;&euro;
+  </p>
 </main>
 
 <script>
-const meseNomi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio',
-  'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
-
-let oreResidueGuardia = 0;
-let dati = [];
-let dataCorrente = new Date(); // per calendario e visual
-
-// Mostra o nasconde input ore straordinario in base a tipo
-document.getElementById('tipoSelect').addEventListener('change', () => {
-  const val = document.getElementById('tipoSelect').value;
-  document.getElementById('inputStraordinarioContainer').style.display = val === 'straordinario' ? 'block' : 'none';
-});
-
-// Carica dati e ore residue da LocalStorage
-function inizializza() {
-  dati = JSON.parse(localStorage.getItem('giornateLavoro')) || [];
-  oreResidueGuardia = parseFloat(localStorage.getItem('oreResidueGuardia')) || 0;
-  document.getElementById('oreResidueInput').value = oreResidueGuardia;
-  aggiornaTabella();
-  creaCalendario();
-  mostraMeseAnno();
+function giornoSettimanaString(num) {
+  // 0=Dom,...6=Sab
+  return ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'][num];
 }
 
-// Aggiorna ore residue
-function aggiornaOreResidue() {
-  const val = parseFloat(document.getElementById('oreResidueInput').value);
-  if (isNaN(val) || val < 0) {
-    alert('Inserisci un numero valido di ore residue!');
-    return;
+// Calcolo guardia secondo tue regole
+function calcolaGuardia(dataString) {
+  const d = new Date(dataString);
+  const giorno = d.getDay(); // 0=Dom,...6=Sab
+  let oreRecupero = 0, gf = 0, forfettario = 0;
+
+  if (giorno >= 1 && giorno <= 4) {
+    // lunedì-giovedì
+    oreRecupero = 8;
+    forfettario = 30;
+  } else if (giorno === 5) {
+    // venerdì
+    oreRecupero = 12;
+    forfettario = 30;
+  } else if (giorno === 0 || giorno === 6) {
+    // sabato/domenica
+    oreRecupero = 8;
+    gf = 1;
+    forfettario = 90;
   }
-  oreResidueGuardia = val;
-  localStorage.setItem('oreResidueGuardia', oreResidueGuardia);
-  aggiornaTabella();
+  return { oreRecupero, gf, forfettario, giornoSettimana: giornoSettimanaString(giorno) };
 }
 
-// Calcola valori giorno
-function calcolaValori(dataClick, tipoClick, oreStraord = 0) {
-  const giorno = new Date(dataClick);
-  const giornoSettimana = giorno.getDay();
-  let oreGuardia = 0;
-  let giorniLavorativi = 0;
-  let oreRecupero = 0;
-  let oreStraordinario = oreStraord;
-
-  if (tipoClick === 'lavoro') {
-    giorniLavorativi = 1;
-  } else if (tipoClick === 'guardia') {
-    if (giornoSettimana >= 1 && giornoSettimana <= 4) {
-      oreGuardia = 8;
-    } else if (giornoSettimana === 5) {
-      oreGuardia = 16;
-    } else if (giornoSettimana === 6 || giornoSettimana === 0) {
-      oreGuardia = 8;
-    }
-  } else if (tipoClick === 'recupero') {
-    if (giornoSettimana >=1 && giornoSettimana <=4) {
-      oreRecupero = 8;
-    } else if (giornoSettimana === 5) {
-      oreRecupero = 4;
-    }
-  } else if (tipoClick === 'straordinario') {
-    // oreStraordinario già passate dal campo input
-  } else {
-    return null;
-  }
-
-  return {
-    data: dataClick,
-    tipo: tipoClick,
-    oreGuardia,
-    giorni: giorniLavorativi,
-    oreRecupero,
-    oreStraordinario
-  };
+function caricaDati() {
+  let dati = localStorage.getItem('guardie');
+  return dati ? JSON.parse(dati) : [];
 }
-
-// Salvataggio dati e aggiornamento
-function salvaDati() {
-  localStorage.setItem('giornateLavoro', JSON.stringify(dati));
+function salvaDati(dati) {
+  localStorage.setItem('guardie', JSON.stringify(dati));
 }
 
 function aggiungiGiorno() {
   const dataInput = document.getElementById('dataInput').value;
-  const tipoSelect = document.getElementById('tipoSelect').value;
-  const oreStraordInput = parseFloat(document.getElementById('oreStraordInput').value) || 0;
-
   if (!dataInput) {
-    alert('Seleziona una data!');
+    alert("Seleziona una data!");
     return;
   }
 
-  // Per straordinario, ore straordino non deve essere zero
-  if (tipoSelect === 'straordinario' && oreStraordInput <= 0) {
-    alert('Inserisci ore straordinario maggiori di zero!');
+  // Non aggiungere doppioni
+  let dati = caricaDati();
+  if (dati.some(g => g.data === dataInput)) {
+    alert('Guardia già inserita per questa data.');
     return;
   }
 
-  const giorno = calcolaValori(dataInput, tipoSelect, oreStraordInput);
-  if (!giorno) {
-    alert('Tipo clic non valido');
-    return;
-  }
+  const calcolo = calcolaGuardia(dataInput);
 
-  // Verifica doppioni, per straordinario permette somma se stesso (modifica)
-  let idx = dati.findIndex(g => g.data === giorno.data && g.tipo === giorno.tipo);
-  if (idx >= 0) {
-    // Se tipo è straordinario sommo ore straordinarie
-    if (tipoSelect === 'straordinario') {
-      dati[idx].oreStraordinario += giorno.oreStraordinario;
-    } else {
-      alert('Giornata già registrata per questa data e tipo.');
-      return;
-    }
-  } else {
-    dati.push(giorno);
-  }
+  dati.push({
+     dataInput,
+    giornoSettimana: calcolo.giornoSettimana,
+    oreRecupero: calcolo.oreRecupero,
+    gf: calcolo.gf,
+    forfettario: calcolo.forfettario
+  });
 
-  salvaDati();
+  salvaDati(dati);
   aggiornaTabella();
-  creaCalendario();
-  resetForm();
+  document.getElementById('dataInput').value = '';
 }
 
-// Rimuove una riga
-function eliminaGiorno(index) {
-  dati.splice(index, 1);
-  salvaDati();
+function eliminaGiorno(idx) {
+  let dati = caricaDati();
+  dati.splice(idx, 1);
+  salvaDati(dati);
   aggiornaTabella();
-  creaCalendario();
 }
 
 function aggiornaTabella() {
+  let dati = caricaDati();
   const tbody = document.querySelector('#tabellaGiornate tbody');
   tbody.innerHTML = '';
 
-  let totaleOreGuardia = 0;
-  let totaleGiorniLavorativi = 0;
-  let totaleOreRecupero = 0;
-  let totaleOreStraordinario = 0;
+  let totaleOre = 0, totaleGF = 0, totaleForfettario = 0;
 
   dati.forEach((g, idx) => {
-    const riga = document.createElement('tr');
-
-    riga.innerHTML = `
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
       <td>${g.data}</td>
-      <td>${g.tipo}</td>
-      <td>${g.oreGuardia}</td>
-      <td>${g.giorni}</td>
+      <td>${g.giornoSettimana}</td>
       <td>${g.oreRecupero}</td>
-      <td>${g.oreStraordinario}</td>
+      <td>${g.gf}</td>
+      <td>${g.forfettario}</td>
       <td><button onclick="eliminaGiorno(${idx})">Elimina</button></td>
     `;
+    tbody.appendChild(tr);
 
-    tbody.appendChild(riga);
-
-    totaleOreGuardia += g.oreGuardia;
-    totaleGiorniLavorativi += g.giorni;
-    totaleOreRecupero += g.oreRecupero;
-    totaleOreStraordinario += g.oreStraordinario;
+    totaleOre += g.oreRecupero;
+    totaleGF += g.gf;
+    totaleForfettario += g.forfettario;
   });
 
-  const oreNetteGuardia = oreResidueGuardia + totaleOreGuardia - totaleOreRecupero;
-  document.getElementById(
-    'totali'
-  ).textContent = `Ore Guardia Totali (incluse residue): ${
-    oreNetteGuardia < 0 ? 0 : oreNetteGuardia
-  } | Giorni Lavorativi: ${totaleGiorniLavorativi} | Ore Recupero: ${totaleOreRecupero} | Ore Straordinario: ${totaleOreStraordinario}`;
+  document.getElementById('totali').textContent =
+    `Ore Recupero totali: ${totaleOre} | Giorni GF: ${totaleGF} | Forfettario totale: ${totaleForfettario} €`;
 }
 
-// Mostra mese e anno in header calendario
-function mostraMeseAnno() {
-  const mese = meseNomi[dataCorrente.getMonth()];
-  const anno = dataCorrente.getFullYear();
-  document.getElementById('meseAnno').textContent = `${mese} ${anno}`;
-}
-
-// Genera calendario mensile con pallini colorati
-function creaCalendario() {
-  const calendario = document.getElementById('calendario');
-  calendario.innerHTML = '';
-
-  const anno = dataCorrente.getFullYear();
-  const mese = dataCorrente.getMonth();
-
-  // 1° giorno del mese
-  const primoGiorno = new Date(anno, mese, 1).getDay(); // Domenica=0, Lunedì=1,...
-  // Numero giorni mese
-  const giorniMese = new Date(anno, mese + 1, 0).getDate();
-
-  // Calcola offset per allineare il primo giorno col giorno corretto della settimana (Domenica=0)
-  let offset = primoGiorno === 0 ? 6 : primoGiorno - 1; // Allinea lunedì come primo giorno
-
-  // Crea i giorni vuoti all'inizio per allineare
-  for (let i = 0; i < offset; i++) {
-    const cellaVuota = document.createElement('div');
-    cellaVuota.classList.add('giorno', 'inactive');
-    calendario.appendChild(cellaVuota);
-  }
-
-  // Crea i giorni del mese
-  for (let giorno = 1; giorno <= giorniMese; giorno++) {
-    const divGiorno = document.createElement('div');
-    divGiorno.classList.add('giorno');
-
-    const dataString = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(
-      giorno
-    ).padStart(2, '0')}`;
-
-    const numeroGiorno = document.createElement('div');
-    numeroGiorno.classList.add('numeroGiorno');
-    numeroGiorno.textContent = giorno;
-    divGiorno.appendChild(numeroGiorno);
-
-    // Trova attività per quel giorno e mostra pallini
-    const attivitaGiorno = dati.filter((d) => d.data === dataString);
-
-    attivitaGiorno.forEach((a) => {
-      const pallino = document.createElement('span');
-      pallino.classList.add('pallino');
-      if (a.tipo === 'lavoro') pallino.classList.add('lavoro');
-      else if (a.tipo === 'guardia') pallino.classList.add('guardia');
-      else if (a.tipo === 'recupero') pallino.classList.add('recupero');
-      else if (a.tipo === 'straordinario') pallino.classList.add('straordinario');
-      divGiorno.appendChild(pallino);
-    });
-
-    calendario.appendChild(divGiorno);
-  }
-}
-
-function resetForm() {
-  document.getElementById('dataInput').value = '';
-  document.getElementById('tipoSelect').value = 'lavoro';
-  document.getElementById('oreStraordInput').value = 0;
-}
-
-inizializza();
+window.onload = aggiornaTabella;
 </script>
-
 </body>
 </html>
-
-
