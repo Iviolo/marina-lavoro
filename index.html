@@ -187,8 +187,7 @@
     <button onclick="aggiornaOreResidue()">Aggiorna</button>
   </div>
 
- <label for="dataInput">Seleziona </label>
-
+  <label for="dataInput">Seleziona data:</label>
   <input type="date" id="dataInput" min="2025-01-01" max="2025-12-31" />
 
   <label for="tipoSelect">Tipo attività:</label>
@@ -295,7 +294,7 @@ function aggiungiGiorno() {
     return;
   }
 
-  let entry = { dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
+  let entry = {data: dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
 
   if (tipoSelect === "guardia") {
     const params = calcolaGuardia(dataInput);
