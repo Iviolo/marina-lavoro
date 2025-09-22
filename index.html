@@ -2,8 +2,9 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Gestione Guardia e Compenso - Marina Militare</title>
+<title>Gestione Lavoro, Guardia, Recupero e Forfettario - Marina Militare</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   body {
     font-family: 'Roboto', sans-serif;
     background-color: #f0f4f8;
@@ -37,8 +38,20 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
+  #meseAnno {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
   label { margin-right: 8px; font-weight: 600; }
-  input[type="date"] { padding: 6px; margin-right: 15px; border-radius: 4px; border: 1px solid #ccc; }
+  input[type="date"], select {
+    padding: 6px;
+    margin-right: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: auto;
+  }
   button {
     padding: 8px 15px;
     background-color: #00539C;
@@ -55,44 +68,84 @@
     margin-top: 20px;
     width: 100%;
     background: white;
-    font-size: 0.95em;
+    font-size: 0.9em;
   }
   th, td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
   }
-  th {
-    background-color: #00539C;
-    color: white;
-  }
+  th { background-color: #00539C; color: white; }
   #totali {
     margin-top: 15px;
     font-weight: 700;
-    font-size: 1.15em;
+    font-size: 1.2em;
     text-align: center;
   }
+  #calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 30px;
+  }
+  .giorno {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px;
+    height: 90px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    background: #f8fbfd;
+  }
+  .giorno.inactive {
+    background-color: #eee;
+    color: #999;
+  }
+  .numeroGiorno {
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  .pallino {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 2px 3px;
+  }
+  .lavoro { background-color: #8B4513; }       /* Marrone */
+  .guardia { background-color: #B22222; }      /* Rosso */
+  .recupero { background-color: #228B22; }     /* Verde */
+  .straordinario { background-color: #1E90FF; }/* Blu */
+  .gf { background-color: #FFA500; }           /* Arancione */
 </style>
 </head>
 <body>
 
 <header>
-  Gestione Guardia e Compenso - Marina Militare
+  Gestione Lavoro, Guardia, Recupero e Forfettario - Marina Militare
 </header>
 
 <main>
+  <div id="meseAnno"></div>
 
-  <label for="dataInput">Seleziona data guardia:</label>
+  <label for="dataInput">Seleziona data:</label>
   <input type="date" id="dataInput" />
+  <select id="tipoSelect">
+    <option value="lavoro">Lavoro</option>
+    <option value="guardia">Guardia</option>
+    <option value="recupero">Recupero Psicofisico</option>
+    <!-- Puoi aggiungere altri tipi qui -->
+  </select>
+  <button onclick="aggiungiGiorno()">Aggiungi</button>
 
-  <button onclick="aggiungiGiorno()">Aggiungi Guardia</button>
-
-  <h3>Giornate di Guardia Registrate</h3>
+  <h3>Giornate Registrate</h3>
   <table id="tabellaGiornate">
     <thead>
       <tr>
         <th>Data</th>
-        <th>Giorno Sett.</th>
+        <th>Tipo</th>
         <th>Ore Recupero</th>
         <th>GF</th>
         <th>Forfettario (&euro;)</th>
@@ -105,110 +158,148 @@
   <p id="totali">
     Ore Recupero totali: 0 | Giorni GF: 0 | Forfettario totale: 0&nbsp;&euro;
   </p>
+
+  <div id="calendario"></div>
 </main>
 
 <script>
-function giornoSettimanaString(num) {
-  // 0=Dom,...6=Sab
-  return ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'][num];
+const meseNomi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio',
+  'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+
+let dati = [];
+let dataCorrente = new Date();
+
+// Mostra il mese e anno sopra
+function mostraMeseAnno() {
+  const mese = meseNomi[dataCorrente.getMonth()];
+  const anno = dataCorrente.getFullYear();
+  document.getElementById('meseAnno').textContent = `${mese} ${anno}`;
 }
 
-// Calcolo guardia secondo tue regole
+// Logic di calcolo per guardia
 function calcolaGuardia(dataString) {
   const d = new Date(dataString);
   const giorno = d.getDay(); // 0=Dom,...6=Sab
   let oreRecupero = 0, gf = 0, forfettario = 0;
-
-  if (giorno >= 1 && giorno <= 4) {
+  if (giorno >= 1 && giorno <=4) {
     // lunedì-giovedì
-    oreRecupero = 8;
-    forfettario = 30;
+    oreRecupero = 8; forfettario = 30;
   } else if (giorno === 5) {
     // venerdì
-    oreRecupero = 12;
-    forfettario = 30;
+    oreRecupero = 12; forfettario = 30;
   } else if (giorno === 0 || giorno === 6) {
-    // sabato/domenica
-    oreRecupero = 8;
-    gf = 1;
-    forfettario = 90;
+    // sabato/domenica/festivo
+    oreRecupero = 8; gf = 1; forfettario = 90;
   }
-  return { oreRecupero, gf, forfettario, giornoSettimana: giornoSettimanaString(giorno) };
-}
-
-function caricaDati() {
-  let dati = localStorage.getItem('guardie');
-  return dati ? JSON.parse(dati) : [];
-}
-function salvaDati(dati) {
-  localStorage.setItem('guardie', JSON.stringify(dati));
+  return { oreRecupero, gf, forfettario };
 }
 
 function aggiungiGiorno() {
   const dataInput = document.getElementById('dataInput').value;
+  const tipoSelect = document.getElementById('tipoSelect').value;
   if (!dataInput) {
     alert("Seleziona una data!");
     return;
   }
-
-  // Non aggiungere doppioni
-  let dati = caricaDati();
-  if (dati.some(g => g.data === dataInput)) {
-    alert('Guardia già inserita per questa data.');
+  let entry = {data: dataInput, tipo: tipoSelect, oreRecupero:0, gf:0, forfettario:0};
+  // Calcoli specifici SOLO per guardia
+  if (tipoSelect === "guardia") {
+    const params = calcolaGuardia(dataInput);
+    entry.oreRecupero = params.oreRecupero;
+    entry.gf = params.gf;
+    entry.forfettario = params.forfettario;
+  }
+  // Non aggiungere doppioni per stesso giorno/tipo
+  if (dati.some(g => g.data === entry.data && g.tipo === entry.tipo)) {
+    alert('Già registrata per questa data e tipo.');
     return;
   }
-
-  const calcolo = calcolaGuardia(dataInput);
-
-  dati.push({
-     dataInput,
-    giornoSettimana: calcolo.giornoSettimana,
-    oreRecupero: calcolo.oreRecupero,
-    gf: calcolo.gf,
-    forfettario: calcolo.forfettario
-  });
-
-  salvaDati(dati);
+  dati.push(entry);
+  salvaDati();
   aggiornaTabella();
+  creaCalendario();
   document.getElementById('dataInput').value = '';
 }
 
 function eliminaGiorno(idx) {
-  let dati = caricaDati();
   dati.splice(idx, 1);
-  salvaDati(dati);
+  salvaDati();
   aggiornaTabella();
+  creaCalendario();
 }
 
 function aggiornaTabella() {
-  let dati = caricaDati();
   const tbody = document.querySelector('#tabellaGiornate tbody');
   tbody.innerHTML = '';
 
-  let totaleOre = 0, totaleGF = 0, totaleForfettario = 0;
-
+  let totOreRecupero = 0, totGF = 0, totForfettario = 0;
   dati.forEach((g, idx) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${g.data}</td>
-      <td>${g.giornoSettimana}</td>
+      <td>${g.tipo}</td>
       <td>${g.oreRecupero}</td>
       <td>${g.gf}</td>
       <td>${g.forfettario}</td>
       <td><button onclick="eliminaGiorno(${idx})">Elimina</button></td>
     `;
     tbody.appendChild(tr);
-
-    totaleOre += g.oreRecupero;
-    totaleGF += g.gf;
-    totaleForfettario += g.forfettario;
+    totOreRecupero += g.oreRecupero;
+    totGF += g.gf;
+    totForfettario += g.forfettario;
   });
-
   document.getElementById('totali').textContent =
-    `Ore Recupero totali: ${totaleOre} | Giorni GF: ${totaleGF} | Forfettario totale: ${totaleForfettario} €`;
+    `Ore Recupero totali: ${totOreRecupero} | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} €`;
 }
 
-window.onload = aggiornaTabella;
+// Calendario con pallini colorati
+function creaCalendario() {
+  const calendario = document.getElementById('calendario');
+  calendario.innerHTML = '';
+  const anno = dataCorrente.getFullYear();
+  const mese = dataCorrente.getMonth();
+  const primoGiorno = new Date(anno, mese, 1).getDay();
+  const giorniMese = new Date(anno, mese+1, 0).getDate();
+  let offset = primoGiorno === 0 ? 6 : primoGiorno - 1;
+
+  for (let i=0; i<offset; i++) {
+    const cellaVuota = document.createElement('div');
+    cellaVuota.classList.add('giorno','inactive');
+    calendario.appendChild(cellaVuota);
+  }
+
+  for (let giorno = 1; giorno <= giorniMese; giorno++) {
+    const divGiorno = document.createElement('div'); divGiorno.classList.add('giorno');
+    const dataString = `${anno}-${String(mese+1).padStart(2,'0')}-${String(giorno).padStart(2,'0')}`;
+    const numeroGiorno = document.createElement('div');
+    numeroGiorno.classList.add('numeroGiorno');
+    numeroGiorno.textContent = giorno;
+    divGiorno.appendChild(numeroGiorno);
+    const attivitaGiorno = dati.filter(d => d.data === dataString);
+    attivitaGiorno.forEach(a => {
+      const pallino = document.createElement('span'); pallino.classList.add('pallino');
+      if (a.tipo === 'lavoro') pallino.classList.add('lavoro');
+      else if (a.tipo === 'guardia') pallino.classList.add('guardia');
+      else if (a.tipo === 'recupero') pallino.classList.add('recupero');
+      if (a.gf) pallino.classList.add('gf');
+      divGiorno.appendChild(pallino);
+    });
+    calendario.appendChild(divGiorno);
+  }
+}
+function salvaDati() {
+  localStorage.setItem('giornate2025', JSON.stringify(dati));
+}
+function caricaDati() {
+  dati = JSON.parse(localStorage.getItem('giornate2025')) || [];
+}
+// All’avvio
+window.onload = () => {
+  caricaDati();
+  mostraMeseAnno();
+  aggiornaTabella();
+  creaCalendario();
+};
 </script>
 </body>
 </html>
