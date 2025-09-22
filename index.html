@@ -4,47 +4,45 @@
 <meta charset="UTF-8" />
 <title>Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
   body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #e9f0f8;
-    color: #003366;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e0f0ff, #c8e0ff);
+    color: #002D62;
     margin: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
   }
 
   header {
+    position: relative;
     width: 90%;
     max-width: 900px;
-    text-align: center;
+    padding: 70px 20px 40px;
     margin-bottom: 20px;
-    position: relative;
-    padding: 60px 20px 40px;
+    background-color: #004080;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,60,0.3);
     color: white;
     font-weight: 700;
     font-size: 2.6em;
-    background-color: #002D62;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
     overflow: hidden;
-    font-family: 'Roboto Slab', serif;
   }
   header::before {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/512px-MarinaMilitare_Emblem.svg.png') no-repeat center center;
-    background-size: contain;
-    opacity: 0.1;
-    transform: translate(-50%, -50%);
-    filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+    inset: 0;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/512px-MarinaMilitare_Emblem.svg.png') center center no-repeat;
+    background-size: 200px 200px;
+    opacity: 0.12;
     pointer-events: none;
     z-index: 0;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
   }
   header > * {
     position: relative;
@@ -55,120 +53,136 @@
     width: 90%;
     max-width: 900px;
     background: white;
-    padding: 25px 25px 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    padding: 30px 30px 35px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
+
   #meseAnno {
-    font-size: 1.8em;
+    font-size: 1.9em;
     font-weight: 700;
-    margin-bottom: 25px;
+    margin-bottom: 28px;
     text-align: center;
+    color: #003366;
   }
-  #oreResidueContainer {
-    margin-bottom: 20px;
-    font-weight: 700;
-    font-size: 1.1em;
-    display: flex;
-    align-items: center;
-  }
-  #oreResidueInput {
-    margin-left: 10px;
-    width: 90px;
-    padding: 5px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+
+  label {
     font-weight: 600;
+    margin-right: 12px;
+    font-size: 1em;
   }
-  label { margin-right: 10px; font-weight: 600; }
+
   input[type="date"], input[type="number"], select {
-    padding: 7px 10px;
-    margin-right: 15px;
-    border-radius: 5px;
-    border: 1px solid #bbb;
+    padding: 8px 12px;
+    margin-right: 16px;
+    border-radius: 7px;
+    border: 1.5px solid #99bce4;
     font-size: 1em;
     outline: none;
-    width: auto;
+    transition: border-color 0.3s ease;
   }
+  input[type="date"]:focus, input[type="number"]:focus, select:focus {
+    border-color: #004080;
+  }
+
   button {
-    padding: 9px 20px;
-    background-color: #00539C;
+    background-color: #0056b3;
     color: white;
     border: none;
-    border-radius: 6px;
+    padding: 11px 24px;
+    font-weight: 700;
+    font-size: 1.1em;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: 700;
-    font-size: 1em;
+    box-shadow: 0 5px 15px rgba(0,86,179,0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
-  button:hover { background-color: #003D66; }
+  button:hover {
+    background-color: #003d7a;
+    box-shadow: 0 8px 20px rgba(0,61,122,0.5);
+  }
+
   h3 {
-    margin-top: 30px;
-    color: #003366;
+    color: #002D62;
     font-weight: 700;
+    font-size: 1.3em;
+    margin-top: 40px;
+    margin-bottom: 12px;
     letter-spacing: 0.05em;
   }
+
   table {
-    border-collapse: collapse;
-    margin-top: 12px;
     width: 100%;
-    background: white;
+    border-collapse: collapse;
+    margin-top: 10px;
     font-size: 0.95em;
-    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
   th, td {
-    border: 1px solid #ddd;
-    padding: 12px 10px;
+    border: 1.2px solid #b0c4de;
+    padding: 14px 12px;
     text-align: center;
   }
   th {
-    background-color: #00539C;
+    background-color: #004080;
     color: white;
     font-weight: 700;
   }
-  #totali {
-    margin-top: 18px;
-    font-weight: 700;
-    font-size: 1.2em;
-    color: #003366;
-    text-align: center;
+  tbody tr:hover {
+    background-color: #f0f8ff;
+    transition: background-color 0.3s ease;
   }
+
+  #totali {
+    margin-top: 22px;
+    font-weight: 700;
+    font-size: 1.25em;
+    text-align: center;
+    color: #003366;
+  }
+
   #calendario {
+    margin-top: 40px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-top: 35px;
+    gap: 14px;
   }
   .giorno {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    min-height: 95px;
-    position: relative;
+    background: #fdfefe;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     cursor: default;
-    background: #f8fbfd;
+    min-height: 95px;
+    padding: 12px 10px;
+    position: relative;
     user-select: none;
+    transition: box-shadow 0.3s ease;
+  }
+  .giorno:hover {
+    box-shadow: 0 6px 18px rgba(0,54,107,0.3);
   }
   .giorno.inactive {
-    background-color: #eee;
-    color: #aaa;
+    background-color: #e8eaed;
+    color: #a0a8b3;
   }
   .numeroGiorno {
     font-weight: 700;
-    font-size: 1.15em;
-    margin-bottom: 8px;
+    font-size: 1.18em;
+    margin-bottom: 10px;
+    color: #003366;
   }
   .pallino {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
     border-radius: 50%;
     display: inline-block;
-    margin: 3px 4px 3px 0;
   }
-  .lavoro { background-color: #8B4513; }       /* Marrone */
-  .guardia { background-color: #B22222; }      /* Rosso */
-  .recupero { background-color: #228B22; }     /* Verde */
-  .straordinario { background-color: #1E90FF; }/* Blu */
-  .gf { background-color: #FFA500; }           /* Arancione */
+  .lavoro { background-color: #8b4513; }
+  .guardia { background-color: #b22222; }
+  .recupero { background-color: #228b22; }
+  .straordinario { background-color: #1e90ff; }
+  .gf { background-color: #ffa500; }
 </style>
 </head>
 <body>
@@ -187,7 +201,7 @@
     <button onclick="aggiornaOreResidue()">Aggiorna</button>
   </div>
 
-  <label for="dataInput">Seleziona data:</label>
+  <label for="dataInput">Seleziona </label>
   <input type="date" id="dataInput" min="2025-01-01" max="2025-12-31" />
 
   <label for="tipoSelect">Tipo attività:</label>
@@ -294,7 +308,7 @@ function aggiungiGiorno() {
     return;
   }
 
-  let entry = {data: dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
+  let entry = { dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
 
   if (tipoSelect === "guardia") {
     const params = calcolaGuardia(dataInput);
