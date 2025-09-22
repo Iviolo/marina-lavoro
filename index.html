@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<title>Gestione Lavoro, Guardia, Recupero e Forfettario - Marina Militare</title>
+<title>Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   body {
@@ -45,7 +45,7 @@
     text-align: center;
   }
   label { margin-right: 8px; font-weight: 600; }
-  input[type="date"], select {
+  input[type="date"], input[type="number"], select {
     padding: 6px;
     margin-right: 15px;
     border-radius: 4px;
@@ -124,20 +124,28 @@
 <body>
 
 <header>
-  Gestione Lavoro, Guardia, Recupero e Forfettario - Marina Militare
+  Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare
 </header>
 
 <main>
   <div id="meseAnno"></div>
 
-  <label for="dataInput">Seleziona data:</label>
+  <label for="dataInput">Seleziona </label>
   <input type="date" id="dataInput" />
+
+  <label for="tipoSelect">Tipo attività:</label>
   <select id="tipoSelect">
     <option value="lavoro">Lavoro</option>
     <option value="guardia">Guardia</option>
     <option value="recupero">Recupero Psicofisico</option>
-    <!-- Puoi aggiungere altri tipi qui -->
+    <option value="straordinario">Straordinario</option>
   </select>
+
+  <div id="inputStraordinarioContainer" style="display:none; margin-top:10px;">
+    <label for="oreStraordInput">Ore straordinario:</label>
+    <input type="number" id="oreStraordInput" min="0" step="0.5" value="0" />
+  </div>
+
   <button onclick="aggiungiGiorno()">Aggiungi</button>
 
   <h3>Giornate Registrate</h3>
@@ -149,6 +157,7 @@
         <th>Ore Recupero</th>
         <th>GF</th>
         <th>Forfettario (&euro;)</th>
+        <th>Ore Straordinario</th>
         <th>Elimina</th>
       </tr>
     </thead>
@@ -156,7 +165,7 @@
   </table>
 
   <p id="totali">
-    Ore Recupero totali: 0 | Giorni GF: 0 | Forfettario totale: 0&nbsp;&euro;
+    Ore Recupero totali: 0 | Giorni GF: 0 | Forfettario totale: 0&nbsp;&euro; | Ore Straordinario: 0
   </p>
 
   <div id="calendario"></div>
@@ -169,26 +178,29 @@ const meseNomi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio',
 let dati = [];
 let dataCorrente = new Date();
 
-// Mostra il mese e anno sopra
+// Mostra o nasconde input ore straordinario in base a tipo attività
+document.getElementById('tipoSelect').addEventListener('change', () => {
+  const val = document.getElementById('tipoSelect').value;
+  document.getElementById('inputStraordinarioContainer').style.display = val === 'straordinario' ? 'block' : 'none';
+});
+
+// Mostra il mese e anno
 function mostraMeseAnno() {
   const mese = meseNomi[dataCorrente.getMonth()];
   const anno = dataCorrente.getFullYear();
   document.getElementById('meseAnno').textContent = `${mese} ${anno}`;
 }
 
-// Logic di calcolo per guardia
+// Calcolo guardia specifico
 function calcolaGuardia(dataString) {
   const d = new Date(dataString);
-  const giorno = d.getDay(); // 0=Dom,...6=Sab
+  const giorno = d.getDay();
   let oreRecupero = 0, gf = 0, forfettario = 0;
-  if (giorno >= 1 && giorno <=4) {
-    // lunedì-giovedì
+  if (giorno >= 1 && giorno <= 4) {
     oreRecupero = 8; forfettario = 30;
   } else if (giorno === 5) {
-    // venerdì
     oreRecupero = 12; forfettario = 30;
   } else if (giorno === 0 || giorno === 6) {
-    // sabato/domenica/festivo
     oreRecupero = 8; gf = 1; forfettario = 90;
   }
   return { oreRecupero, gf, forfettario };
@@ -197,28 +209,50 @@ function calcolaGuardia(dataString) {
 function aggiungiGiorno() {
   const dataInput = document.getElementById('dataInput').value;
   const tipoSelect = document.getElementById('tipoSelect').value;
+  const oreStraordInput = parseFloat(document.getElementById('oreStraordInput').value) || 0;
+
   if (!dataInput) {
     alert("Seleziona una data!");
     return;
   }
-  let entry = {data: dataInput, tipo: tipoSelect, oreRecupero:0, gf:0, forfettario:0};
-  // Calcoli specifici SOLO per guardia
+
+  if (tipoSelect === 'straordinario' && oreStraordInput <= 0) {
+    alert('Inserisci ore straordinario maggiori di zero!');
+    return;
+  }
+
+  let entry = { dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
+
   if (tipoSelect === "guardia") {
     const params = calcolaGuardia(dataInput);
     entry.oreRecupero = params.oreRecupero;
     entry.gf = params.gf;
     entry.forfettario = params.forfettario;
+  } else if (tipoSelect === "straordinario") {
+    entry.oreStraordinario = oreStraordInput;
   }
-  // Non aggiungere doppioni per stesso giorno/tipo
+
   if (dati.some(g => g.data === entry.data && g.tipo === entry.tipo)) {
-    alert('Già registrata per questa data e tipo.');
-    return;
+    if (tipoSelect === "straordinario") {
+      // Se già esiste straordinario in quella data, somma le ore
+      const idx = dati.findIndex(g => g.data === entry.data && g.tipo === entry.tipo);
+      dati[idx].oreStraordinario += entry.oreStraordinario;
+      salvaDati();
+      aggiornaTabella();
+      creaCalendario();
+      resetForm();
+      return;
+    } else {
+      alert('Giornata già registrata per questa data e tipo.');
+      return;
+    }
   }
+
   dati.push(entry);
   salvaDati();
   aggiornaTabella();
   creaCalendario();
-  document.getElementById('dataInput').value = '';
+  resetForm();
 }
 
 function eliminaGiorno(idx) {
@@ -232,7 +266,7 @@ function aggiornaTabella() {
   const tbody = document.querySelector('#tabellaGiornate tbody');
   tbody.innerHTML = '';
 
-  let totOreRecupero = 0, totGF = 0, totForfettario = 0;
+  let totOreRecupero = 0, totGF = 0, totForfettario = 0, totOreStraordinario = 0;
   dati.forEach((g, idx) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -241,26 +275,30 @@ function aggiornaTabella() {
       <td>${g.oreRecupero}</td>
       <td>${g.gf}</td>
       <td>${g.forfettario}</td>
+      <td>${g.oreStraordinario || 0}</td>
       <td><button onclick="eliminaGiorno(${idx})">Elimina</button></td>
     `;
     tbody.appendChild(tr);
+
     totOreRecupero += g.oreRecupero;
     totGF += g.gf;
     totForfettario += g.forfettario;
+    totOreStraordinario += g.oreStraordinario || 0;
   });
+
   document.getElementById('totali').textContent =
-    `Ore Recupero totali: ${totOreRecupero} | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} €`;
+    `Ore Recupero totali: ${totOreRecupero} | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} € | Ore Straordinario: ${totOreStraordinario}`;
 }
 
-// Calendario con pallini colorati
+// Funzione per creare calendario con pallini colorati
 function creaCalendario() {
   const calendario = document.getElementById('calendario');
   calendario.innerHTML = '';
   const anno = dataCorrente.getFullYear();
   const mese = dataCorrente.getMonth();
   const primoGiorno = new Date(anno, mese, 1).getDay();
-  const giorniMese = new Date(anno, mese+1, 0).getDate();
-  let offset = primoGiorno === 0 ? 6 : primoGiorno - 1;
+  const giorniMese = new Date(anno, mese + 1, 0).getDate();
+  let offset = primoGiorno === 0 ? 6 : primoGiorno -1;
 
   for (let i=0; i<offset; i++) {
     const cellaVuota = document.createElement('div');
@@ -268,32 +306,45 @@ function creaCalendario() {
     calendario.appendChild(cellaVuota);
   }
 
-  for (let giorno = 1; giorno <= giorniMese; giorno++) {
-    const divGiorno = document.createElement('div'); divGiorno.classList.add('giorno');
+  for (let giorno=1; giorno<=giorniMese; giorno++) {
+    const divGiorno = document.createElement('div');
+    divGiorno.classList.add('giorno');
     const dataString = `${anno}-${String(mese+1).padStart(2,'0')}-${String(giorno).padStart(2,'0')}`;
     const numeroGiorno = document.createElement('div');
     numeroGiorno.classList.add('numeroGiorno');
     numeroGiorno.textContent = giorno;
     divGiorno.appendChild(numeroGiorno);
+
     const attivitaGiorno = dati.filter(d => d.data === dataString);
+
     attivitaGiorno.forEach(a => {
-      const pallino = document.createElement('span'); pallino.classList.add('pallino');
+      const pallino = document.createElement('span');
+      pallino.classList.add('pallino');
       if (a.tipo === 'lavoro') pallino.classList.add('lavoro');
       else if (a.tipo === 'guardia') pallino.classList.add('guardia');
       else if (a.tipo === 'recupero') pallino.classList.add('recupero');
+      else if (a.tipo === 'straordinario') pallino.classList.add('straordinario');
       if (a.gf) pallino.classList.add('gf');
       divGiorno.appendChild(pallino);
     });
+
     calendario.appendChild(divGiorno);
   }
 }
+
 function salvaDati() {
   localStorage.setItem('giornate2025', JSON.stringify(dati));
 }
 function caricaDati() {
   dati = JSON.parse(localStorage.getItem('giornate2025')) || [];
 }
-// All’avvio
+
+function resetForm() {
+  document.getElementById('dataInput').value = '';
+  document.getElementById('tipoSelect').value = 'lavoro';
+  document.getElementById('oreStraordInput').value = 0;
+}
+
 window.onload = () => {
   caricaDati();
   mostraMeseAnno();
