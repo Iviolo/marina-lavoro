@@ -191,16 +191,17 @@ function mostraMeseAnno() {
   document.getElementById('meseAnno').textContent = `${mese} ${anno}`;
 }
 
-// Calcolo guardia specifico
+// Calcolo guardia specifico con parsing sicuro della data
 function calcolaGuardia(dataString) {
-  const d = new Date(dataString);
-  const giorno = d.getDay();
+  const [anno, mese, giorno] = dataString.split('-');
+  const d = new Date(anno, parseInt(mese) - 1, giorno);
+  const giornoSettimana = d.getDay();
   let oreRecupero = 0, gf = 0, forfettario = 0;
-  if (giorno >= 1 && giorno <= 4) {
+  if (giornoSettimana >= 1 && giornoSettimana <= 4) {
     oreRecupero = 8; forfettario = 30;
-  } else if (giorno === 5) {
+  } else if (giornoSettimana === 5) {
     oreRecupero = 12; forfettario = 30;
-  } else if (giorno === 0 || giorno === 6) {
+  } else if (giornoSettimana === 0 || giornoSettimana === 6) {
     oreRecupero = 8; gf = 1; forfettario = 90;
   }
   return { oreRecupero, gf, forfettario };
