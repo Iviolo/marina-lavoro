@@ -7,7 +7,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f0f4f8;
+    background-color: #e9f0f8;
     color: #003366;
     margin: 20px;
     display: flex;
@@ -18,101 +18,130 @@
     width: 90%;
     max-width: 900px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     position: relative;
-    padding: 40px 20px 10px;
+    padding: 60px 20px 20px;
     color: white;
     font-weight: 700;
-    font-size: 2.4em;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/250px-MarinaMilitare_Emblem.svg.png') no-repeat center bottom;
+    font-size: 2.5em;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/300px-MarinaMilitare_Emblem.svg.png') no-repeat center;
     background-size: 150px 150px;
     background-color: #003366;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.35);
   }
   main {
     width: 90%;
     max-width: 900px;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 25px 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
   }
   #meseAnno {
     font-size: 1.8em;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-align: center;
   }
-  label { margin-right: 8px; font-weight: 600; }
-  input[type="date"], input[type="number"], select {
-    padding: 6px;
-    margin-right: 15px;
-    border-radius: 4px;
+  #oreResidueContainer {
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+  }
+  #oreResidueInput {
+    margin-left: 10px;
+    width: 90px;
+    padding: 5px;
+    border-radius: 6px;
     border: 1px solid #ccc;
+    font-weight: 600;
+  }
+  label { margin-right: 10px; font-weight: 600; }
+  input[type="date"], input[type="number"], select {
+    padding: 7px 10px;
+    margin-right: 15px;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    font-size: 1em;
+    outline: none;
     width: auto;
   }
   button {
-    padding: 8px 15px;
+    padding: 9px 20px;
     background-color: #00539C;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
-    margin-top: 10px;
+    font-weight: 700;
+    font-size: 1em;
   }
   button:hover { background-color: #003D66; }
+  h3 {
+    margin-top: 30px;
+    color: #003366;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
   table {
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 12px;
     width: 100%;
     background: white;
-    font-size: 0.9em;
+    font-size: 0.95em;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
   }
   th, td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px 10px;
     text-align: center;
   }
-  th { background-color: #00539C; color: white; }
+  th {
+    background-color: #00539C;
+    color: white;
+    font-weight: 700;
+  }
   #totali {
-    margin-top: 15px;
+    margin-top: 18px;
     font-weight: 700;
     font-size: 1.2em;
+    color: #003366;
     text-align: center;
   }
   #calendario {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-top: 30px;
+    gap: 10px;
+    margin-top: 35px;
   }
   .giorno {
     border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 8px;
-    height: 90px;
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 95px;
     position: relative;
-    cursor: pointer;
-    user-select: none;
+    cursor: default;
     background: #f8fbfd;
+    user-select: none;
   }
   .giorno.inactive {
     background-color: #eee;
-    color: #999;
+    color: #aaa;
   }
   .numeroGiorno {
     font-weight: 700;
-    font-size: 1.1em;
-    margin-bottom: 5px;
+    font-size: 1.15em;
+    margin-bottom: 8px;
   }
   .pallino {
     width: 14px;
     height: 14px;
     border-radius: 50%;
     display: inline-block;
-    margin: 2px 3px;
+    margin: 3px 4px 3px 0;
   }
   .lavoro { background-color: #8B4513; }       /* Marrone */
   .guardia { background-color: #B22222; }      /* Rosso */
@@ -128,7 +157,14 @@
 </header>
 
 <main>
+
   <div id="meseAnno"></div>
+
+  <div id="oreResidueContainer">
+    <label for="oreResidueInput">Ore residue guardia iniziali:</label>
+    <input type="number" id="oreResidueInput" min="0" step="0.5" value="0" />
+    <button onclick="aggiornaOreResidue()">Aggiorna</button>
+  </div>
 
   <label for="dataInput">Seleziona </label>
   <input type="date" id="dataInput" />
@@ -177,26 +213,41 @@ const meseNomi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio',
 
 let dati = [];
 let dataCorrente = new Date();
+let oreResidueGuardia = 0;
 
-// Mostra o nasconde input ore straordinario in base a tipo attività
+// Mostra/nasconde input ore straordinario in base a tipo attività
 document.getElementById('tipoSelect').addEventListener('change', () => {
   const val = document.getElementById('tipoSelect').value;
   document.getElementById('inputStraordinarioContainer').style.display = val === 'straordinario' ? 'block' : 'none';
 });
 
-// Mostra il mese e anno
+// Aggiorna ore residue impostate dall’utente
+function aggiornaOreResidue() {
+  let oreVal = parseFloat(document.getElementById('oreResidueInput').value);
+  if (isNaN(oreVal) || oreVal < 0) {
+    alert('Inserisci un numero valido per le ore residue!');
+    return;
+  }
+  oreResidueGuardia = oreVal;
+  salvaDati();
+  aggiornaTabella();
+}
+
+// Mostra mese e anno in alto
 function mostraMeseAnno() {
   const mese = meseNomi[dataCorrente.getMonth()];
   const anno = dataCorrente.getFullYear();
   document.getElementById('meseAnno').textContent = `${mese} ${anno}`;
 }
 
-// Calcolo guardia specifico con parsing sicuro della data
+// Calcola parametri per guardia
 function calcolaGuardia(dataString) {
   const [anno, mese, giorno] = dataString.split('-');
   const d = new Date(anno, parseInt(mese) - 1, giorno);
   const giornoSettimana = d.getDay();
-  let oreRecupero = 0, gf = 0, forfettario = 0;
+  let oreRecupero = 0;
+  let gf = 0;
+  let forfettario = 0;
   if (giornoSettimana >= 1 && giornoSettimana <= 4) {
     oreRecupero = 8; forfettario = 30;
   } else if (giornoSettimana === 5) {
@@ -213,7 +264,7 @@ function aggiungiGiorno() {
   const oreStraordInput = parseFloat(document.getElementById('oreStraordInput').value) || 0;
 
   if (!dataInput) {
-    alert("Seleziona una data!");
+    alert('Seleziona una data!');
     return;
   }
 
@@ -235,7 +286,6 @@ function aggiungiGiorno() {
 
   if (dati.some(g => g.data === entry.data && g.tipo === entry.tipo)) {
     if (tipoSelect === "straordinario") {
-      // Se già esiste straordinario in quella data, somma le ore
       const idx = dati.findIndex(g => g.data === entry.data && g.tipo === entry.tipo);
       dati[idx].oreStraordinario += entry.oreStraordinario;
       salvaDati();
@@ -287,8 +337,10 @@ function aggiornaTabella() {
     totOreStraordinario += g.oreStraordinario || 0;
   });
 
+  const oreFinaliGuardia = oreResidueGuardia + totOreRecupero;
+
   document.getElementById('totali').textContent =
-    `Ore Recupero totali: ${totOreRecupero} | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} € | Ore Straordinario: ${totOreStraordinario}`;
+    `Ore Recupero totali: ${oreFinaliGuardia} (incluse residue: ${oreResidueGuardia}) | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} € | Ore Straordinario: ${totOreStraordinario}`;
 }
 
 // Funzione per creare calendario con pallini colorati
@@ -335,9 +387,12 @@ function creaCalendario() {
 
 function salvaDati() {
   localStorage.setItem('giornate2025', JSON.stringify(dati));
+  localStorage.setItem('oreResidueGuardia', oreResidueGuardia);
 }
 function caricaDati() {
   dati = JSON.parse(localStorage.getItem('giornate2025')) || [];
+  oreResidueGuardia = parseFloat(localStorage.getItem('oreResidueGuardia')) || 0;
+  document.getElementById('oreResidueInput').value = oreResidueGuardia;
 }
 
 function resetForm() {
