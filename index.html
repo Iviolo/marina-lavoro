@@ -308,7 +308,8 @@ function aggiungiGiorno() {
     return;
   }
 
-  let entry = { dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0};
+  // CORRETTO: usa "data" come chiave!
+  let entry = {  dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0 };
 
   if (tipoSelect === "guardia") {
     const params = calcolaGuardia(dataInput);
