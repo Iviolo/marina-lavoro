@@ -5,7 +5,6 @@
 <title>Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
   body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #e0f0ff, #c8e0ff);
@@ -16,7 +15,6 @@
     align-items: center;
     min-height: 100vh;
   }
-
   header {
     position: relative;
     width: 90%;
@@ -48,7 +46,6 @@
     position: relative;
     z-index: 1;
   }
-
   main {
     width: 90%;
     max-width: 900px;
@@ -57,7 +54,6 @@
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
-
   #meseAnno {
     font-size: 1.9em;
     font-weight: 700;
@@ -65,14 +61,12 @@
     text-align: center;
     color: #003366;
   }
-
   label {
     font-weight: 600;
     margin-right: 12px;
     font-size: 1em;
   }
-
-  input[type="date"], input[type="number"], select {
+  input[type="text"], input[type="number"], select {
     padding: 8px 12px;
     margin-right: 16px;
     border-radius: 7px;
@@ -81,10 +75,9 @@
     outline: none;
     transition: border-color 0.3s ease;
   }
-  input[type="date"]:focus, input[type="number"]:focus, select:focus {
+  input[type="text"]:focus, input[type="number"]:focus, select:focus {
     border-color: #004080;
   }
-
   button {
     background-color: #0056b3;
     color: white;
@@ -101,7 +94,6 @@
     background-color: #003d7a;
     box-shadow: 0 8px 20px rgba(0,61,122,0.5);
   }
-
   h3 {
     color: #002D62;
     font-weight: 700;
@@ -110,7 +102,6 @@
     margin-bottom: 12px;
     letter-spacing: 0.05em;
   }
-
   table {
     width: 100%;
     border-collapse: collapse;
@@ -132,7 +123,6 @@
     background-color: #f0f8ff;
     transition: background-color 0.3s ease;
   }
-
   #totali {
     margin-top: 22px;
     font-weight: 700;
@@ -140,7 +130,6 @@
     text-align: center;
     color: #003366;
   }
-
   #calendario {
     margin-top: 40px;
     display: grid;
@@ -201,8 +190,8 @@
     <button onclick="aggiornaOreResidue()">Aggiorna</button>
   </div>
 
-  <label for="dataInput">Seleziona </label>
-  <input type="date" id="dataInput" min="2025-01-01" max="2025-12-31" />
+  <label for="dataInput">Data (aaaa-mm-gg):</label>
+  <input type="text" id="dataInput" maxlength="10" pattern="\d{4}-\d{2}-\d{2}" placeholder="2025-09-23" />
 
   <label for="tipoSelect">Tipo attività:</label>
   <select id="tipoSelect">
@@ -295,20 +284,21 @@ function calcolaGuardia(dataString) {
 
 function aggiungiGiorno() {
   const dataInput = document.getElementById('dataInput').value;
-  const tipoSelect = document.getElementById('tipoSelect').value;
-  const oreStraordInput = parseFloat(document.getElementById('oreStraordInput').value) || 0;
 
-  if (!dataInput) {
-    alert('Seleziona una data!');
+  // Verifica formato robusto
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dataInput)) {
+    alert('Inserisci la data nel formato corretto: aaaa-mm-gg (Es: 2025-09-23)');
     return;
   }
+
+  const tipoSelect = document.getElementById('tipoSelect').value;
+  const oreStraordInput = parseFloat(document.getElementById('oreStraordInput').value) || 0;
 
   if (tipoSelect === 'straordinario' && oreStraordInput <= 0) {
     alert('Inserisci ore straordinario maggiori di zero!');
     return;
   }
 
-  // CORRETTO: usa "data" come chiave!
   let entry = {  dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0 };
 
   if (tipoSelect === "guardia") {
