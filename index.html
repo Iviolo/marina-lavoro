@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <title>Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
   body {
@@ -173,6 +175,8 @@
   .straordinario { background-color: #1e90ff; }
   .gf { background-color: #ffa500; }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
 
@@ -190,8 +194,8 @@
     <button onclick="aggiornaOreResidue()">Aggiorna</button>
   </div>
 
-  <label for="dataInput">Data (aaaa-mm-gg):</label>
-  <input type="text" id="dataInput" maxlength="10" pattern="\d{4}-\d{2}-\d{2}" placeholder="2025-09-23" />
+  <label for="dataInput">Seleziona </label>
+  <input type="text" id="dataInput" placeholder="Seleziona data..." />
 
   <label for="tipoSelect">Tipo attività:</label>
   <select id="tipoSelect">
@@ -428,5 +432,16 @@ window.onload = () => {
   creaCalendario();
 };
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+flatpickr("#dataInput", {
+  dateFormat: "Y-m-d",
+  altInput: false,
+  allowInput: true,
+  clickOpens: true
+});
+</script>
+
 </body>
 </html>
