@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Marina Calculator">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMzYiIGZpbGw9IiMxYTNkN2EiLz4KPHBhdGggZD0iTTk2IDQwTDEyMCA4MEg3Mkw5NiA0MFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTgwIDg4SDEyMFYxMjBIODBWODhaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik02NCAxMjBIODBWMTUySDY0VjEyMFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTExMiAxMjBIMTI4VjE1MkgxMTJWMTIwWiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K">
-    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMzYiIGZpbGw9IiMxYTNkN2EiLz4KPHBhdGggZD0iTTk2IDQwTDEyMCA4MEg3Mkw5NiA0MFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTgwIDg4SDEyMFYxMjBIODBWODhaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik02NCAxMjBIODBWMTUySDY0VjEyMFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTExMiAxMjBIMTI4VjE1MkgxMTJWMTIwWiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Marina Calc">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIGZpbGw9IiMxYTNkN2EiLz48cGF0aCBkPSJNMTIwIDQwTDk2IDgwSDcyTDk2IDQwWiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik04MCA4OEgxMjBWMTIwSDgwVjg4WiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik02NCAxMjBIODBWMTUySDY0VjEyMFoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMTEyIDEyMEgxMjhWMTUySDExMlYxMjBaIiBmaWxsPSIjZmZmIi8+PC9zdmc+">
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIGZpbGw9IiMxYTNkN2EiLz48cGF0aCBkPSJNMTIwIDQwTDk2IDgwSDcyTDk2IDQwWiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik04MCA4OEgxMjBWMTIwSDgwVjg4WiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik02NCAxMjBIODBWMTUySDY0VjEyMFoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMTEyIDEyMEgxMjhWMTUySDExMlYxMjBaIiBmaWxsPSIjZmZmIi8+PC9zdmc+">
     <title>Marina Calculator</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -134,6 +135,8 @@
             padding: 10px 15px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
+            flex: 1;
+            text-align: center;
         }
         .tab.active {
             border-bottom: 3px solid #1a3d7a;
@@ -154,22 +157,32 @@
             margin-bottom: 20px;
         }
         .app-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background: #1a3d7a;
-            border-radius: 12px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        @media (max-width: 380px) {
+            .saldo-section {
+                grid-template-columns: 1fr;
+            }
+            .tab {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="app-header">
-        <div class="app-icon">M</div>
+        <div class="app-icon">⛵</div>
         <h1>Marina Calculator</h1>
     </div>
     
@@ -206,7 +219,10 @@
                 <ul>
                     <li>Lun-Gio: 8h recupero + €30</li>
                     <li>Venerdì: 12h recupero + €30</li>
-                    <li>Sab/Dom: 1 giorno GF + 8h recupero + €30</li>
+                    <li>Sab/Dom: 1 giorno GF + 8h recupero + €90</li>
+                    <li>Recupero Lun-Gio: -8 ore</li>
+                    <li>Recupero Ven: -4 ore</li>
+                    <li>Recupero Sab/Dom: -1 giorno festivo</li>
                 </ul>
             </div>
         </div>
@@ -315,7 +331,7 @@
                     } else { // Sab-Dom
                         oreGiorno = 8;
                         gfGiorno = 1;
-                        compensoGiorno = 30;
+                        compensoGiorno = 90;
                     }
                     break;
                     
