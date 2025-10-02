@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contatore Marina Militare</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Marina Calculator">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMzYiIGZpbGw9IiMxYTNkN2EiLz4KPHBhdGggZD0iTTk2IDQwTDEyMCA4MEg3Mkw5NiA0MFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTgwIDg4SDEyMFYxMjBIODBWODhaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik02NCAxMjBIODBWMTUySDY0VjEyMFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTExMiAxMjBIMTI4VjE1MkgxMTJWMTIwWiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K">
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMzYiIGZpbGw9IiMxYTNkN2EiLz4KPHBhdGggZD0iTTk2IDQwTDEyMCA4MEg3Mkw5NiA0MFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTgwIDg4SDEyMFYxMjBIODBWODhaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik02NCAxMjBIODBWMTUySDY0VjEyMFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTExMiAxMjBIMTI4VjE1MkgxMTJWMTIwWiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K">
+    <title>Marina Calculator</title>
     <style>
         * {
             box-sizing: border-box;
@@ -16,11 +21,13 @@
             min-height: 100vh;
             padding: 15px;
             color: #333;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
         }
         .container {
             max-width: 100%;
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 20px;
@@ -50,7 +57,7 @@
             width: 100%;
             padding: 12px;
             border: 2px solid #e1e5eb;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
             background: white;
         }
@@ -61,6 +68,7 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(26, 61, 122, 0.3);
         }
         button:active {
             transform: scale(0.98);
@@ -74,42 +82,27 @@
         .saldo-card {
             background: #e8f4ff;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
             border: 2px solid #1a3d7a;
         }
         .saldo-card h3 {
             color: #1a3d7a;
             margin-bottom: 10px;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .saldo-valore {
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
         .positivo { color: #28a745; }
         .negativo { color: #dc3545; }
-        .storico {
-            margin-top: 20px;
-        }
         .movimento {
             background: #f8f9fa;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 10px;
             border-left: 4px solid #1a3d7a;
-        }
-        .movimento-header {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .movimento-dettagli {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #666;
         }
         .tipo-guardia { border-left-color: #28a745; }
         .tipo-recupero { border-left-color: #dc3545; }
@@ -129,7 +122,7 @@
             border-left: 4px solid #ffc107;
             padding: 12px;
             margin: 15px 0;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 0.9rem;
         }
         .tabs {
@@ -153,29 +146,51 @@
         .tab-content.active {
             display: block;
         }
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: #1a3d7a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
-    <h1>Contatore Marina Militare</h1>
+    <div class="app-header">
+        <div class="app-icon">M</div>
+        <h1>Marina Calculator</h1>
+    </div>
     
     <div class="container">
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('nuovo')">Nuovo Servizio</div>
-            <div class="tab" onclick="switchTab('saldo')">Saldo Attuale</div>
-            <div class="tab" onclick="switchTab('storico')">Storico</div>
+            <div class="tab active" onclick="switchTab('nuovo')">➕ Nuovo</div>
+            <div class="tab" onclick="switchTab('saldo')">📊 Saldo</div>
+            <div class="tab" onclick="switchTab('storico')">📋 Storico</div>
         </div>
         
         <div id="nuovo-tab" class="tab-content active">
-            <h2>Nuovo Inserimento</h2>
+            <h2>Nuovo Servizio</h2>
             <div class="form-group">
-                <label for="tipoServizio">Tipo di servizio:</label>
+                <label for="tipoServizio">Tipo servizio:</label>
                 <select id="tipoServizio">
-                    <option value="guardia">Guardia</option>
-                    <option value="recupero">Recupero</option>
-                    <option value="ordinaria">Ferie Ordinarie</option>
-                    <option value="straordinaria">Ferie Straordinarie</option>
-                    <option value="malattia">Malattia</option>
-                    <option value="permesso">Permesso 937</option>
+                    <option value="guardia">🚨 Guardia</option>
+                    <option value="recupero">🏖️ Recupero</option>
+                    <option value="ordinaria">📅 Ferie Ordinarie</option>
+                    <option value="straordinaria">📆 Ferie Straordinarie</option>
+                    <option value="malattia">🏥 Malattia</option>
+                    <option value="permesso">📋 Permesso 937</option>
                 </select>
             </div>
             
@@ -187,14 +202,11 @@
             <button id="aggiungiBtn">Aggiungi Servizio</button>
             
             <div class="info-box">
-                <strong>Informazioni compensi (CORRETTI):</strong>
+                <strong>Informazioni compensi:</strong>
                 <ul>
                     <li>Lun-Gio: 8h recupero + €30</li>
                     <li>Venerdì: 12h recupero + €30</li>
                     <li>Sab/Dom: 1 giorno GF + 8h recupero + €30</li>
-                    <li>Recupero Lun-Gio: -8 ore</li>
-                    <li>Recupero Ven: -4 ore</li>
-                    <li>Recupero Sab/Dom: -1 giorno festivo</li>
                 </ul>
             </div>
         </div>
@@ -229,8 +241,8 @@
             </div>
             
             <div class="azioni">
-                <button id="resetBtn" class="btn-secondario">Azzera Tutto</button>
-                <button id="exportBtn">Esporta Dati</button>
+                <button id="resetBtn" class="btn-secondario">🔄 Azzera</button>
+                <button id="exportBtn">📤 Esporta</button>
             </div>
         </div>
         
@@ -303,7 +315,7 @@
                     } else { // Sab-Dom
                         oreGiorno = 8;
                         gfGiorno = 1;
-                        compensoGiorno = 30; // CORRETTO: 30 euro non 90
+                        compensoGiorno = 30;
                     }
                     break;
                     
@@ -379,12 +391,12 @@
             saldo.permesso += calcolo.permesso;
 
             // Salva nei movimenti
-            movimenti.unshift(movimento); // Aggiungi in testa
+            movimenti.unshift(movimento);
             salvaDati();
             aggiornaInterfaccia();
 
             // Mostra conferma
-            alert('Servizio aggiunto con successo!');
+            alert('✅ Servizio aggiunto!');
         }
 
         function rimuoviMovimento(id) {
@@ -440,24 +452,24 @@
                 let dettagli = [];
                 if (movimento.ore !== 0) dettagli.push(`Ore: ${movimento.ore > 0 ? '+' : ''}${movimento.ore}`);
                 if (movimento.gf !== 0) dettagli.push(`GF: ${movimento.gf > 0 ? '+' : ''}${movimento.gf}`);
-                if (movimento.ordinaria !== 0) dettagli.push(`Ord: ${movimento.ordinaria > 0 ? '+' : ''}${movimento.ordinaria}`);
-                if (movimento.straordinaria !== 0) dettagli.push(`Straord: ${movimento.straordinaria > 0 ? '+' : ''}${movimento.straordinaria}`);
-                if (movimento.permesso !== 0) dettagli.push(`Perm: ${movimento.permesso > 0 ? '+' : ''}${movimento.permesso}`);
+                if (movimento.ordinaria !== 0) dettagli.push(`Ord: ${movimento.ordinaria}`);
+                if (movimento.straordinaria !== 0) dettagli.push(`Straord: ${movimento.straordinaria}`);
+                if (movimento.permesso !== 0) dettagli.push(`Perm: ${movimento.permesso}`);
                 if (movimento.compenso !== 0) dettagli.push(`€${movimento.compenso}`);
                 
                 movDiv.innerHTML = `
-                    <div class="movimento-header">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
                         <span>${getTipoTesto(movimento.tipo)}</span>
                         <span>${movimento.data}</span>
                     </div>
-                    <div class="movimento-dettagli">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666;">
                         <span>${dettagli.join(' | ')}</span>
                     </div>
                     <div style="font-size: 0.8rem; color: #999; margin-top: 5px;">
                         ${movimento.timestamp}
                     </div>
-                    <button onclick="rimuoviMovimento(${movimento.id})" style="margin-top: 8px; padding: 5px 10px; font-size: 0.8rem;">
-                        Elimina
+                    <button onclick="rimuoviMovimento(${movimento.id})" style="margin-top: 8px; padding: 5px 10px; font-size: 0.8rem; background: #dc3545; color: white; border: none; border-radius: 5px;">
+                        ❌ Elimina
                     </button>
                 `;
                 
