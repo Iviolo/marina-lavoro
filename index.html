@@ -1,442 +1,518 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<title>Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #e0f0ff, #c8e0ff);
-    color: #002D62;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
-  header {
-    position: relative;
-    width: 90%;
-    max-width: 900px;
-    padding: 70px 20px 40px;
-    margin-bottom: 20px;
-    background-color: #004080;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,60,0.3);
-    color: white;
-    font-weight: 700;
-    font-size: 2.6em;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-  }
-  header::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/MarinaMilitare_Emblem.svg/512px-MarinaMilitare_Emblem.svg.png') center center no-repeat;
-    background-size: 200px 200px;
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 0;
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
-  }
-  header > * {
-    position: relative;
-    z-index: 1;
-  }
-  main {
-    width: 90%;
-    max-width: 900px;
-    background: white;
-    padding: 30px 30px 35px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  }
-  #meseAnno {
-    font-size: 1.9em;
-    font-weight: 700;
-    margin-bottom: 28px;
-    text-align: center;
-    color: #003366;
-  }
-  label {
-    font-weight: 600;
-    margin-right: 12px;
-    font-size: 1em;
-  }
-  input[type="text"], input[type="number"], select {
-    padding: 8px 12px;
-    margin-right: 16px;
-    border-radius: 7px;
-    border: 1.5px solid #99bce4;
-    font-size: 1em;
-    outline: none;
-    transition: border-color 0.3s ease;
-  }
-  input[type="text"]:focus, input[type="number"]:focus, select:focus {
-    border-color: #004080;
-  }
-  button {
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    padding: 11px 24px;
-    font-weight: 700;
-    font-size: 1.1em;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,86,179,0.3);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  button:hover {
-    background-color: #003d7a;
-    box-shadow: 0 8px 20px rgba(0,61,122,0.5);
-  }
-  h3 {
-    color: #002D62;
-    font-weight: 700;
-    font-size: 1.3em;
-    margin-top: 40px;
-    margin-bottom: 12px;
-    letter-spacing: 0.05em;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 0.95em;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  th, td {
-    border: 1.2px solid #b0c4de;
-    padding: 14px 12px;
-    text-align: center;
-  }
-  th {
-    background-color: #004080;
-    color: white;
-    font-weight: 700;
-  }
-  tbody tr:hover {
-    background-color: #f0f8ff;
-    transition: background-color 0.3s ease;
-  }
-  #totali {
-    margin-top: 22px;
-    font-weight: 700;
-    font-size: 1.25em;
-    text-align: center;
-    color: #003366;
-  }
-  #calendario {
-    margin-top: 40px;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 14px;
-  }
-  .giorno {
-    background: #fdfefe;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    cursor: default;
-    min-height: 95px;
-    padding: 12px 10px;
-    position: relative;
-    user-select: none;
-    transition: box-shadow 0.3s ease;
-  }
-  .giorno:hover {
-    box-shadow: 0 6px 18px rgba(0,54,107,0.3);
-  }
-  .giorno.inactive {
-    background-color: #e8eaed;
-    color: #a0a8b3;
-  }
-  .numeroGiorno {
-    font-weight: 700;
-    font-size: 1.18em;
-    margin-bottom: 10px;
-    color: #003366;
-  }
-  .pallino {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  .lavoro { background-color: #8b4513; }
-  .guardia { background-color: #b22222; }
-  .recupero { background-color: #228b22; }
-  .straordinario { background-color: #1e90ff; }
-  .gf { background-color: #ffa500; }
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatore Marina Militare</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a3d7a 0%, #2c5aa0 100%);
+            min-height: 100vh;
+            padding: 15px;
+            color: #333;
+        }
+        .container {
+            max-width: 100%;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        h2 {
+            color: #1a3d7a;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #1a3d7a;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+        button {
+            background: linear-gradient(135deg, #1a3d7a 0%, #2c5aa0 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .saldo-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .saldo-card {
+            background: #e8f4ff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #1a3d7a;
+        }
+        .saldo-card h3 {
+            color: #1a3d7a;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .saldo-valore {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .positivo { color: #28a745; }
+        .negativo { color: #dc3545; }
+        .storico {
+            margin-top: 20px;
+        }
+        .movimento {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #1a3d7a;
+        }
+        .movimento-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .movimento-dettagli {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .tipo-guardia { border-left-color: #28a745; }
+        .tipo-recupero { border-left-color: #dc3545; }
+        .tipo-ordinaria { border-left-color: #6c757d; }
+        .tipo-malattia { border-left-color: #ffc107; }
+        .tipo-straordinaria { border-left-color: #17a2b8; }
+        .azioni {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-secondario {
+            background: #6c757d;
+        }
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            border-bottom: 3px solid #1a3d7a;
+            font-weight: bold;
+            color: #1a3d7a;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
+    <h1>Contatore Marina Militare</h1>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('nuovo')">Nuovo Servizio</div>
+            <div class="tab" onclick="switchTab('saldo')">Saldo Attuale</div>
+            <div class="tab" onclick="switchTab('storico')">Storico</div>
+        </div>
+        
+        <div id="nuovo-tab" class="tab-content active">
+            <h2>Nuovo Inserimento</h2>
+            <div class="form-group">
+                <label for="tipoServizio">Tipo di servizio:</label>
+                <select id="tipoServizio">
+                    <option value="guardia">Guardia</option>
+                    <option value="recupero">Recupero</option>
+                    <option value="ordinaria">Ferie Ordinarie</option>
+                    <option value="straordinaria">Ferie Straordinarie</option>
+                    <option value="malattia">Malattia</option>
+                    <option value="permesso">Permesso 937</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="dataServizio">Data servizio:</label>
+                <input type="date" id="dataServizio">
+            </div>
+            
+            <button id="aggiungiBtn">Aggiungi Servizio</button>
+            
+            <div class="info-box">
+                <strong>Informazioni compensi (CORRETTI):</strong>
+                <ul>
+                    <li>Lun-Gio: 8h recupero + €30</li>
+                    <li>Venerdì: 12h recupero + €30</li>
+                    <li>Sab/Dom: 1 giorno GF + 8h recupero + €30</li>
+                    <li>Recupero Lun-Gio: -8 ore</li>
+                    <li>Recupero Ven: -4 ore</li>
+                    <li>Recupero Sab/Dom: -1 giorno festivo</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="saldo-tab" class="tab-content">
+            <h2>Saldo Attuale</h2>
+            <div class="saldo-section">
+                <div class="saldo-card">
+                    <h3>Ore Recupero</h3>
+                    <div id="saldoOre" class="saldo-valore positivo">20.20</div>
+                </div>
+                <div class="saldo-card">
+                    <h3>Giorni GF</h3>
+                    <div id="saldoGF" class="saldo-valore positivo">0</div>
+                </div>
+                <div class="saldo-card">
+                    <h3>Ferie Ordinarie</h3>
+                    <div id="saldoOrdinaria" class="saldo-valore positivo">39</div>
+                </div>
+                <div class="saldo-card">
+                    <h3>Ferie Straordinarie</h3>
+                    <div id="saldoStraordinaria" class="saldo-valore positivo">41</div>
+                </div>
+                <div class="saldo-card">
+                    <h3>Permesso 937</h3>
+                    <div id="saldoPermesso" class="saldo-valore positivo">4</div>
+                </div>
+                <div class="saldo-card">
+                    <h3>Compenso Totale</h3>
+                    <div id="saldoCompenso" class="saldo-valore positivo">€0</div>
+                </div>
+            </div>
+            
+            <div class="azioni">
+                <button id="resetBtn" class="btn-secondario">Azzera Tutto</button>
+                <button id="exportBtn">Esporta Dati</button>
+            </div>
+        </div>
+        
+        <div id="storico-tab" class="tab-content">
+            <h2>Storico Movimenti</h2>
+            <div id="storicoMovimenti"></div>
+        </div>
+    </div>
 
-<header>
-  Gestione Lavoro, Guardia, Recupero, Straordinario e Forfettario - Marina Militare
-</header>
+    <script>
+        // Inizializza i dati con i valori dal tuo foglio
+        let movimenti = JSON.parse(localStorage.getItem('marinaMovimenti')) || [];
+        let saldo = JSON.parse(localStorage.getItem('marinaSaldo')) || { 
+            ore: 20.20, 
+            gf: 0, 
+            ordinaria: 39,
+            straordinaria: 41,
+            permesso: 4,
+            compenso: 0 
+        };
 
-<main>
+        // Aggiorna la visualizzazione al caricamento
+        document.addEventListener('DOMContentLoaded', function() {
+            aggiornaInterfaccia();
+            
+            // Imposta la data di oggi come predefinita
+            const oggi = new Date().toISOString().split('T')[0];
+            document.getElementById('dataServizio').value = oggi;
+            
+            // Aggiungi event listeners
+            document.getElementById('aggiungiBtn').addEventListener('click', aggiungiServizio);
+            document.getElementById('resetBtn').addEventListener('click', azzeraTutto);
+            document.getElementById('exportBtn').addEventListener('click', esportaDati);
+        });
 
-  <div id="meseAnno"></div>
+        function switchTab(tabName) {
+            // Nascondi tutti i tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostra il tab selezionato
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            event.target.classList.add('active');
+        }
 
-  <div id="oreResidueContainer">
-    <label for="oreResidueInput">Ore residue guardia iniziali:</label>
-    <input type="number" id="oreResidueInput" min="0" step="0.5" value="0" />
-    <button onclick="aggiornaOreResidue()">Aggiorna</button>
-  </div>
+        function calcolaServizio(tipo, data) {
+            const dataObj = new Date(data);
+            const giorno = dataObj.getDay(); // 0=domenica, 1=lunedì, ..., 6=sabato
+            const dataFormattata = dataObj.toLocaleDateString('it-IT');
+            
+            let oreGiorno = 0;
+            let gfGiorno = 0;
+            let compensoGiorno = 0;
+            let ordinariaGiorno = 0;
+            let straordinariaGiorno = 0;
+            let permessoGiorno = 0;
 
-  <label for="dataInput">Seleziona </label>
-  <input type="text" id="dataInput" placeholder="Seleziona data..." />
+            switch(tipo) {
+                case 'guardia':
+                    if (giorno >= 1 && giorno <= 4) { // Lun-Gio
+                        oreGiorno = 8;
+                        compensoGiorno = 30;
+                    } else if (giorno === 5) { // Ven
+                        oreGiorno = 12;
+                        compensoGiorno = 30;
+                    } else { // Sab-Dom
+                        oreGiorno = 8;
+                        gfGiorno = 1;
+                        compensoGiorno = 30; // CORRETTO: 30 euro non 90
+                    }
+                    break;
+                    
+                case 'recupero':
+                    if (giorno >= 1 && giorno <= 4) { // Lun-Gio
+                        oreGiorno = -8;
+                    } else if (giorno === 5) { // Ven
+                        oreGiorno = -4;
+                    } else { // Sab-Dom
+                        gfGiorno = -1;
+                    }
+                    break;
+                    
+                case 'ordinaria':
+                    ordinariaGiorno = -1;
+                    break;
+                    
+                case 'straordinaria':
+                    straordinariaGiorno = -1;
+                    break;
+                    
+                case 'malattia':
+                    // Malattia - nessun effetto su ore/GF/compenso
+                    break;
+                    
+                case 'permesso':
+                    permessoGiorno = -1;
+                    break;
+            }
 
-  <label for="tipoSelect">Tipo attività:</label>
-  <select id="tipoSelect">
-    <option value="lavoro">Lavoro</option>
-    <option value="guardia">Guardia</option>
-    <option value="recupero">Recupero Psicofisico</option>
-    <option value="straordinario">Straordinario</option>
-  </select>
+            return {
+                data: dataFormattata,
+                ore: oreGiorno,
+                gf: gfGiorno,
+                compenso: compensoGiorno,
+                ordinaria: ordinariaGiorno,
+                straordinaria: straordinariaGiorno,
+                permesso: permessoGiorno
+            };
+        }
 
-  <div id="inputStraordinarioContainer" style="display:none; margin-top:10px;">
-    <label for="oreStraordInput">Ore straordinario:</label>
-    <input type="number" id="oreStraordInput" min="0" step="0.5" value="0" />
-  </div>
+        function aggiungiServizio() {
+            const tipo = document.getElementById('tipoServizio').value;
+            const data = document.getElementById('dataServizio').value;
 
-  <button onclick="aggiungiGiorno()">Aggiungi</button>
+            if (!data) {
+                alert('Inserisci la data del servizio');
+                return;
+            }
 
-  <h3>Giornate Registrate</h3>
-  <table id="tabellaGiornate">
-    <thead>
-      <tr>
-        <th>Data</th>
-        <th>Tipo</th>
-        <th>Ore Recupero</th>
-        <th>GF</th>
-        <th>Forfettario (&euro;)</th>
-        <th>Ore Straordinario</th>
-        <th>Elimina</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+            const calcolo = calcolaServizio(tipo, data);
+            
+            // Crea il movimento
+            const movimento = {
+                id: Date.now(),
+                tipo: tipo,
+                data: data,
+                ore: calcolo.ore,
+                gf: calcolo.gf,
+                compenso: calcolo.compenso,
+                ordinaria: calcolo.ordinaria,
+                straordinaria: calcolo.straordinaria,
+                permesso: calcolo.permesso,
+                timestamp: new Date().toLocaleString('it-IT')
+            };
 
-  <p id="totali">
-    Ore Recupero totali: 0 | Giorni GF: 0 | Forfettario totale: 0&nbsp;&euro; | Ore Straordinario: 0
-  </p>
+            // Aggiorna saldo
+            saldo.ore += calcolo.ore;
+            saldo.gf += calcolo.gf;
+            saldo.compenso += calcolo.compenso;
+            saldo.ordinaria += calcolo.ordinaria;
+            saldo.straordinaria += calcolo.straordinaria;
+            saldo.permesso += calcolo.permesso;
 
-  <div id="calendario"></div>
-</main>
+            // Salva nei movimenti
+            movimenti.unshift(movimento); // Aggiungi in testa
+            salvaDati();
+            aggiornaInterfaccia();
 
-<script>
-const meseNomi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio',
-  'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+            // Mostra conferma
+            alert('Servizio aggiunto con successo!');
+        }
 
-let dati = [];
-let dataCorrente = new Date();
-let oreResidueGuardia = 0;
+        function rimuoviMovimento(id) {
+            const movimento = movimenti.find(m => m.id === id);
+            if (movimento) {
+                // Sottrai dal saldo
+                saldo.ore -= movimento.ore;
+                saldo.gf -= movimento.gf;
+                saldo.compenso -= movimento.compenso;
+                saldo.ordinaria -= movimento.ordinaria;
+                saldo.straordinaria -= movimento.straordinaria;
+                saldo.permesso -= movimento.permesso;
+                
+                // Rimuovi movimento
+                movimenti = movimenti.filter(m => m.id !== id);
+                salvaDati();
+                aggiornaInterfaccia();
+            }
+        }
 
-document.getElementById('tipoSelect').addEventListener('change', () => {
-  const val = document.getElementById('tipoSelect').value;
-  document.getElementById('inputStraordinarioContainer').style.display = val === 'straordinario' ? 'block' : 'none';
-});
+        function aggiornaInterfaccia() {
+            // Aggiorna saldo
+            document.getElementById('saldoOre').textContent = saldo.ore.toFixed(2);
+            document.getElementById('saldoOre').className = 'saldo-valore ' + (saldo.ore >= 0 ? 'positivo' : 'negativo');
+            
+            document.getElementById('saldoGF').textContent = saldo.gf;
+            document.getElementById('saldoGF').className = 'saldo-valore ' + (saldo.gf >= 0 ? 'positivo' : 'negativo');
+            
+            document.getElementById('saldoOrdinaria').textContent = saldo.ordinaria;
+            document.getElementById('saldoOrdinaria').className = 'saldo-valore ' + (saldo.ordinaria >= 0 ? 'positivo' : 'negativo');
+            
+            document.getElementById('saldoStraordinaria').textContent = saldo.straordinaria;
+            document.getElementById('saldoStraordinaria').className = 'saldo-valore ' + (saldo.straordinaria >= 0 ? 'positivo' : 'negativo');
+            
+            document.getElementById('saldoPermesso').textContent = saldo.permesso;
+            document.getElementById('saldoPermesso').className = 'saldo-valore ' + (saldo.permesso >= 0 ? 'positivo' : 'negativo');
+            
+            document.getElementById('saldoCompenso').textContent = '€' + saldo.compenso;
 
-function aggiornaOreResidue() {
-  let oreVal = parseFloat(document.getElementById('oreResidueInput').value);
-  if (isNaN(oreVal) || oreVal < 0) {
-    alert('Inserisci un numero valido per le ore residue!');
-    return;
-  }
-  oreResidueGuardia = oreVal;
-  salvaDati();
-  aggiornaTabella();
-}
+            // Aggiorna storico
+            const storicoDiv = document.getElementById('storicoMovimenti');
+            storicoDiv.innerHTML = '';
 
-function mostraMeseAnno() {
-  const mese = meseNomi[dataCorrente.getMonth()];
-  const anno = dataCorrente.getFullYear();
-  document.getElementById('meseAnno').textContent = `${mese} ${anno}`;
-}
+            if (movimenti.length === 0) {
+                storicoDiv.innerHTML = '<div class="info-box">Nessun movimento registrato</div>';
+                return;
+            }
 
-function calcolaGuardia(dataString) {
-  const [anno, mese, giorno] = dataString.split('-');
-  const d = new Date(anno, parseInt(mese) - 1, giorno);
-  const giornoSettimana = d.getDay();
-  let oreRecupero = 0;
-  let gf = 0;
-  let forfettario = 0;
-  if (giornoSettimana >= 1 && giornoSettimana <= 4) {
-    oreRecupero = 8; forfettario = 30;
-  } else if (giornoSettimana === 5) {
-    oreRecupero = 12; forfettario = 30;
-  } else if (giornoSettimana === 0 || giornoSettimana === 6) {
-    oreRecupero = 8; gf = 1; forfettario = 90;
-  }
-  return { oreRecupero, gf, forfettario };
-}
+            movimenti.forEach(movimento => {
+                const movDiv = document.createElement('div');
+                movDiv.className = `movimento tipo-${movimento.tipo}`;
+                
+                let dettagli = [];
+                if (movimento.ore !== 0) dettagli.push(`Ore: ${movimento.ore > 0 ? '+' : ''}${movimento.ore}`);
+                if (movimento.gf !== 0) dettagli.push(`GF: ${movimento.gf > 0 ? '+' : ''}${movimento.gf}`);
+                if (movimento.ordinaria !== 0) dettagli.push(`Ord: ${movimento.ordinaria > 0 ? '+' : ''}${movimento.ordinaria}`);
+                if (movimento.straordinaria !== 0) dettagli.push(`Straord: ${movimento.straordinaria > 0 ? '+' : ''}${movimento.straordinaria}`);
+                if (movimento.permesso !== 0) dettagli.push(`Perm: ${movimento.permesso > 0 ? '+' : ''}${movimento.permesso}`);
+                if (movimento.compenso !== 0) dettagli.push(`€${movimento.compenso}`);
+                
+                movDiv.innerHTML = `
+                    <div class="movimento-header">
+                        <span>${getTipoTesto(movimento.tipo)}</span>
+                        <span>${movimento.data}</span>
+                    </div>
+                    <div class="movimento-dettagli">
+                        <span>${dettagli.join(' | ')}</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #999; margin-top: 5px;">
+                        ${movimento.timestamp}
+                    </div>
+                    <button onclick="rimuoviMovimento(${movimento.id})" style="margin-top: 8px; padding: 5px 10px; font-size: 0.8rem;">
+                        Elimina
+                    </button>
+                `;
+                
+                storicoDiv.appendChild(movDiv);
+            });
+        }
 
-function aggiungiGiorno() {
-  const dataInput = document.getElementById('dataInput').value;
+        function getTipoTesto(tipo) {
+            const tipi = {
+                'guardia': '🚨 Guardia',
+                'recupero': '🏖️ Recupero',
+                'ordinaria': '📅 Ferie Ordinarie',
+                'straordinaria': '📆 Ferie Straordinarie',
+                'malattia': '🏥 Malattia',
+                'permesso': '📋 Permesso 937'
+            };
+            return tipi[tipo] || tipo;
+        }
 
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dataInput)) {
-    alert('Inserisci la data nel formato corretto: aaaa-mm-gg (Es: 2025-09-23)');
-    return;
-  }
+        function salvaDati() {
+            localStorage.setItem('marinaMovimenti', JSON.stringify(movimenti));
+            localStorage.setItem('marinaSaldo', JSON.stringify(saldo));
+        }
 
-  const tipoSelect = document.getElementById('tipoSelect').value;
-  const oreStraordInput = parseFloat(document.getElementById('oreStraordInput').value) || 0;
+        function azzeraTutto() {
+            if (confirm('Sei sicuro di voler azzerare tutti i dati?')) {
+                movimenti = [];
+                saldo = { 
+                    ore: 20.20, 
+                    gf: 0, 
+                    ordinaria: 39,
+                    straordinaria: 41,
+                    permesso: 4,
+                    compenso: 0 
+                };
+                salvaDati();
+                aggiornaInterfaccia();
+            }
+        }
 
-  if (tipoSelect === 'straordinario' && oreStraordInput <= 0) {
-    alert('Inserisci ore straordinario maggiori di zero!');
-    return;
-  }
-
-  let entry = {  dataInput, tipo: tipoSelect, oreRecupero: 0, gf: 0, forfettario: 0, oreStraordinario: 0 };
-
-  if (tipoSelect === "guardia") {
-    const params = calcolaGuardia(dataInput);
-    entry.oreRecupero = params.oreRecupero;
-    entry.gf = params.gf;
-    entry.forfettario = params.forfettario;
-  } else if (tipoSelect === "straordinario") {
-    entry.oreStraordinario = oreStraordInput;
-  }
-
-  if (dati.some(g => g.data === entry.data && g.tipo === entry.tipo)) {
-    if (tipoSelect === "straordinario") {
-      const idx = dati.findIndex(g => g.data === entry.data && g.tipo === entry.tipo);
-      dati[idx].oreStraordinario += entry.oreStraordinario;
-      salvaDati();
-      aggiornaTabella();
-      creaCalendario();
-      resetForm();
-      return;
-    } else {
-      alert('Giornata già registrata per questa data e tipo.');
-      return;
-    }
-  }
-
-  dati.push(entry);
-  salvaDati();
-  aggiornaTabella();
-  creaCalendario();
-  resetForm();
-}
-
-function eliminaGiorno(idx) {
-  dati.splice(idx, 1);
-  salvaDati();
-  aggiornaTabella();
-  creaCalendario();
-}
-
-function aggiornaTabella() {
-  const tbody = document.querySelector('#tabellaGiornate tbody');
-  tbody.innerHTML = '';
-
-  let totOreRecupero = 0, totGF = 0, totForfettario = 0, totOreStraordinario = 0;
-  dati.forEach((g, idx) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${g.data}</td>
-      <td>${g.tipo}</td>
-      <td>${g.oreRecupero}</td>
-      <td>${g.gf}</td>
-      <td>${g.forfettario}</td>
-      <td>${g.oreStraordinario || 0}</td>
-      <td><button onclick="eliminaGiorno(${idx})">Elimina</button></td>
-    `;
-    tbody.appendChild(tr);
-
-    totOreRecupero += g.oreRecupero;
-    totGF += g.gf;
-    totForfettario += g.forfettario;
-    totOreStraordinario += g.oreStraordinario || 0;
-  });
-
-  const oreFinaliGuardia = oreResidueGuardia + totOreRecupero;
-
-  document.getElementById('totali').textContent =
-    `Ore Recupero totali: ${oreFinaliGuardia} (incluse residue: ${oreResidueGuardia}) | Giorni GF: ${totGF} | Forfettario totale: ${totForfettario} € | Ore Straordinario: ${totOreStraordinario}`;
-}
-
-function creaCalendario() {
-  const calendario = document.getElementById('calendario');
-  calendario.innerHTML = '';
-  const anno = dataCorrente.getFullYear();
-  const mese = dataCorrente.getMonth();
-  const primoGiorno = new Date(anno, mese, 1).getDay();
-  const giorniMese = new Date(anno, mese + 1, 0).getDate();
-  let offset = primoGiorno === 0 ? 6 : primoGiorno -1;
-
-  for (let i=0; i<offset; i++) {
-    const cellaVuota = document.createElement('div');
-    cellaVuota.classList.add('giorno','inactive');
-    calendario.appendChild(cellaVuota);
-  }
-
-  for (let giorno=1; giorno<=giorniMese; giorno++) {
-    const divGiorno = document.createElement('div');
-    divGiorno.classList.add('giorno');
-    const dataString = `${anno}-${String(mese+1).padStart(2,'0')}-${String(giorno).padStart(2,'0')}`;
-    const numeroGiorno = document.createElement('div');
-    numeroGiorno.classList.add('numeroGiorno');
-    numeroGiorno.textContent = giorno;
-    divGiorno.appendChild(numeroGiorno);
-
-    const attivitaGiorno = dati.filter(d => d.data === dataString);
-
-    attivitaGiorno.forEach(a => {
-      const pallino = document.createElement('span');
-      pallino.classList.add('pallino');
-      if (a.tipo === 'lavoro') pallino.classList.add('lavoro');
-      else if (a.tipo === 'guardia') pallino.classList.add('guardia');
-      else if (a.tipo === 'recupero') pallino.classList.add('recupero');
-      else if (a.tipo === 'straordinario') pallino.classList.add('straordinario');
-      if (a.gf) pallino.classList.add('gf');
-      divGiorno.appendChild(pallino);
-    });
-
-    calendario.appendChild(divGiorno);
-  }
-}
-
-function salvaDati() {
-  localStorage.setItem('giornate2025', JSON.stringify(dati));
-  localStorage.setItem('oreResidueGuardia', oreResidueGuardia);
-}
-function caricaDati() {
-  dati = JSON.parse(localStorage.getItem('giornate2025')) || [];
-  oreResidueGuardia = parseFloat(localStorage.getItem('oreResidueGuardia')) || 0;
-  document.getElementById('oreResidueInput').value = oreResidueGuardia;
-}
-
-function resetForm() {
-  document.getElementById('dataInput').value = '';
-  document.getElementById('tipoSelect').value = 'lavoro';
-  document.getElementById('oreStraordInput').value = 0;
-}
-
-window.onload = () => {
-  caricaDati();
-  mostraMeseAnno();
-  aggiornaTabella();
-  creaCalendario();
-};
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-flatpickr("#dataInput", { dateFormat: "Y-m-d" });
-</script>
-
+        function esportaDati() {
+            const dati = {
+                saldo: saldo,
+                movimenti: movimenti,
+                dataEsportazione: new Date().toLocaleString('it-IT')
+            };
+            
+            const blob = new Blob([JSON.stringify(dati, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `marina_militare_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
 </body>
 </html>
